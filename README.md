@@ -1,62 +1,56 @@
-# Walkie Talkie — Plasmo Voice add-on (NeoForge 1.21.1)
+<div align=center>
 
-A walkie-talkie item with selectable frequencies, built on Plasmo Voice 2.1.x.
+# Tune In. Talk Out.
 
-* **Shift + right-click** → opens a vanilla-style config screen (frequency + power).
-* **Quick tap right-click** → toggles the radio on/off.
-* **Hold right-click** → push-to-talk on the current frequency.
-* **Radio on (anywhere in inventory)** → you hear everyone transmitting on that frequency.
+## A Plasmo Voice Add-on that adds Walkie-Talkie to Minecraft. Vanilla & Simple to use.
 
-## How it fits together
+![NeoForge](https://img.shields.io/badge/NeoForge-21.1.233-d8b62b?style=plastic&logo=curseforge&logoColor=white)
+![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1-3aa343?style=plastic&logo=minecraft&logoColor=white)
+![Requires Plasmo Voice](https://img.shields.io/badge/Requires-Plasmo%20Voice-5865F2?style=plastic)
+[![Github Downloads](https://img.shields.io/github/downloads/SimpleFoxOfficial/pv-addon-walkietalkie/total?style=plastic&logo=github&label=GitHub&color=purple)](https://github.com/SimpleFoxOfficial/pv-addon-walkietalkie/releases)
+[![Latest Release](https://img.shields.io/github/v/release/SimpleFoxOfficial/pv-addon-walkietalkie?style=plastic&logo=github&color=purple)](https://github.com/SimpleFoxOfficial/pv-addon-walkietalkie/releases)
 
-| Layer | File(s) | Confidence |
-|---|---|---|
-| Item + gestures | `item/WalkieTalkieItem.java` | solid |
-| Per-item state (frequency/on) | `registry/WTComponents.java` (data components) | solid |
-| Config GUI | `client/WalkieTalkieScreen.java`, `client/WTClientHooks.java` | solid |
-| Networking (GUI → server) | `net/…` | solid |
-| **Frequency routing (who hears whom)** | `voice/WalkieVoiceServerAddon.java` + `voice/RadioState.java` | solid (a couple PV method names flagged `VERIFY`) |
-| **Item-as-PTT mic capture** | `client/voice/WalkieVoiceClientAddon.java` | **needs you to wire one PV-client call** |
+</div>
 
-### The one thing to finish: client mic capture
+---
 
-Plasmo Voice captures the microphone **on the client**. The server only receives audio
-when some client activation is actively capturing. So "hold the item to talk" needs a
-client bridge that starts/stops capture into the `walkie_talkie` activation.
+### Minecraft Version: 1.21.1
 
-`WalkieVoiceClientAddon` already detects *when* to transmit (item held + enabled + past
-threshold). The only TODO is the single call in `setTransmitting(boolean)` — see the two
-documented strategies there, and the PV client Dokka under
-`su.plo.voice.api.client.audio.capture`.
+### NeoForge Version: 21.1.233
 
-**Ship-now fallback (no PV internals):** leave `setTransmitting` as a no-op. The server
-registers the `walkie_talkie` activation, so it shows up in PV's **Settings ▸ Activation**
-tab; players bind a push-to-talk key there and hold it to talk on the frequency. The item
-still handles config, on/off, and listening.
+### Dependency: [Plasmo Voice](https://modrinth.com/mod/1bZhdhsH)
 
-### `VERIFY` markers in the server addon
+---
 
-Two PV symbol names couldn't be confirmed from the public docs and are marked `VERIFY`:
-* `VoiceServerPlayer#getInstance().getUUID()` — getting the player UUID.
-* `PlayerManager#getPlayerById(UUID)` — and the broadcast `sendAudioFrame(...)` overload.
+# Features
 
-Open the PV Dokka (https://dokka.plasmovoice.com) for exact 2.1.x signatures.
+- **Easy to use** - craft the radio and use it on the go
+- **Numeric frequency channels** — tune in to talk privately with anyone on the same channel
+- **Cross-dimensional range** — stay in touch with players in other dimensions, not just nearby ones
 
-## Your custom model
+# How To Install
 
-Drop your model JSON at:
-```
-src/main/resources/assets/walkietalkie/models/item/walkie_talkie.json
-```
-(replacing the placeholder). If it's a flat icon, also add
-`textures/item/walkie_talkie.png`.
+1. Install [Plasmo Voice](https://modrinth.com/mod/1bZhdhsH) on both client and server — this addon does nothing without it
+2. Download the latest jar from [Releases](https://github.com/SimpleFoxOfficial/pv-addon-walkietalkie/releases)
+3. Drop it in your `mods` folder (client + server)
+4. Launch the game, craft a Walkie-Talkie, and tune in
 
-## Build
+# Usage
 
-```
-./gradlew build        # jar in build/libs
-./gradlew runClient    # test in-game (needs Plasmo Voice in the run too)
+- Hold or equip the Walkie-Talkie and open its GUI to set a frequency
+- Anyone holding a Walkie-Talkie tuned to the same frequency can hear you, regardless of distance or dimension
+- Keep an eye on the power gauge — a dead Walkie-Talkie won't transmit or receive
+
+# Building from Source
+
+```bash
+git clone https://github.com/SimpleFoxOfficial/pv-addon-walkietalkie.git
+cd pv-addon-walkietalkie
+./gradlew build
 ```
 
-Requires: Java 21, NeoForge 21.1.233, and **Plasmo Voice `neoforge-1.21-2.1.5`** installed
-in the same instance (client and server).
+The built jar will be in `build/libs/`.
+
+# Credits
+
+Developed by [SimpleFoxOfficial](https://github.com/SimpleFoxOfficial) and **MrEri** for the [Vector Point](https://github.com/SimpleFoxOfficial/VectorPoint) modpack, built on top of [Plasmo Voice](https://github.com/plasmoapp/plasmo-voice) by Apehum.
