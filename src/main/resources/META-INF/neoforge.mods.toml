@@ -1,6 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
 license = "All Rights Reserved"
+issueTrackerURL="https://github.com/SimpleFoxOfficial/pv-addon-walkietalkie/issues"
 
 [[mods]]
 modId = "${mod_id}"
