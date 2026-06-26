@@ -7,7 +7,7 @@
 ![Requires Plasmo Voice](https://img.shields.io/badge/Requires-Plasmo%20Voice-5865F2?style=plastic)
 [![Github Downloads](https://img.shields.io/github/downloads/SimpleFoxOfficial/pv-addon-walkietalkie/total?style=plastic&logo=github&label=GitHub&color=purple)](https://github.com/SimpleFoxOfficial/pv-addon-walkietalkie/releases)
 [![Latest Release](https://img.shields.io/github/v/release/SimpleFoxOfficial/pv-addon-walkietalkie?style=plastic&logo=github&color=purple)](https://github.com/SimpleFoxOfficial/pv-addon-walkietalkie/releases)
-[![Modrinth](https://img.shields.io/modrinth/dt/KbXmELYr?style=plastic&logo=modrinth&logoColor=white&label=Modrinth&color=lime
+[![Modrinth](https://img.shields.io/modrinth/dt/KbXmELYr?style=plastic&logo=modrinth&logoColor=white&label=Modrinth&color=green
 )](https://modrinth.com/mod/pv-addon-walkietalkie)
 
 </div>
