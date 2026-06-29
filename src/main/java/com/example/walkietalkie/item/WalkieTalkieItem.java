@@ -1,6 +1,7 @@
 package com.example.walkietalkie.item;
 
 import com.example.walkietalkie.client.WTClientHooks;
+import com.example.walkietalkie.net.payload.StaticStateS2C;
 import com.example.walkietalkie.net.payload.ToggleWalkieC2S;
 import com.example.walkietalkie.registry.WTComponents;
 import com.example.walkietalkie.registry.WTSounds;
@@ -98,6 +99,22 @@ public class WalkieTalkieItem extends Item {
         }
     }
 
+    /**
+     * Broadcasts a looping-static start/stop packet to every player listening on
+     * {@code frequency}. Each listener starts or stops the analog static sound on
+     * their own client via {@link com.example.walkietalkie.client.WTClientSounds}.
+     */
+    public static void broadcastStaticState(MinecraftServer server, int frequency, boolean active) {
+        StaticStateS2C packet = new StaticStateS2C(frequency, active);
+        RadioState state = RadioState.get(server);
+        for (UUID uuid : state.listenersFor(frequency)) {
+            ServerPlayer listener = server.getPlayerList().getPlayer(uuid);
+            if (listener != null) {
+                PacketDistributor.sendToPlayer(listener, packet);
+            }
+        }
+    }
+
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
@@ -140,6 +157,7 @@ public class WalkieTalkieItem extends Item {
             int freq = frequencyOf(stack);
             RadioState.get(sp.server).startTransmitting(sp, freq);
             notifyFrequency(sp.server, freq, WTSounds.TALK_START.get());
+            broadcastStaticState(sp.server, freq, true);
         }
     }
 
@@ -157,6 +175,7 @@ public class WalkieTalkieItem extends Item {
             int freq = frequencyOf(stack);
             RadioState.get(sp.server).stopTransmitting(sp);
             notifyFrequency(sp.server, freq, WTSounds.TALK_STOP.get());
+            broadcastStaticState(sp.server, freq, false);
         }
     }
 

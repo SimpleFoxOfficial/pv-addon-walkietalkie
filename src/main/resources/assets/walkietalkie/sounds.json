@@ -14,5 +14,14 @@
   "talk_stop": {
     "subtitle": "subtitles.walkietalkie.talk_stop",
     "sounds": [ "walkietalkie:walkietalkie/style2mtp/off4" ]
+  },
+  "radio_static": {
+    "subtitle": "subtitles.walkietalkie.radio_static",
+    "sounds": [
+      {
+        "name": "walkietalkie:static/analog/radio_static",
+        "stream": true
+      }
+    ]
   }
 }

@@ -24,5 +24,6 @@
   "subtitles.walkietalkie.toggle_on": "Рация включается",
   "subtitles.walkietalkie.toggle_off": "Рация выключается",
   "subtitles.walkietalkie.talk_start": "Щелчок рации",
-  "subtitles.walkietalkie.talk_stop": "Щелчок рации"
+  "subtitles.walkietalkie.talk_stop": "Щелчок рации",
+  "subtitles.walkietalkie.radio_static": "Шум эфира"
 }

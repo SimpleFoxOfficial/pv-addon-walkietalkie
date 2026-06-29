@@ -1,8 +1,10 @@
 package com.example.walkietalkie.net;
 
+import com.example.walkietalkie.client.WTClientSounds;
 import com.example.walkietalkie.item.WalkieTalkieItem;
 import com.example.walkietalkie.net.payload.ConfigureWalkieC2S;
 import com.example.walkietalkie.net.payload.SfxVolumeC2S;
+import com.example.walkietalkie.net.payload.StaticStateS2C;
 import com.example.walkietalkie.net.payload.ToggleWalkieC2S;
 import com.example.walkietalkie.registry.WTComponents;
 import com.example.walkietalkie.voice.RadioState;
@@ -29,6 +31,14 @@ public final class WTPayloads {
                 SfxVolumeC2S.TYPE,
                 SfxVolumeC2S.STREAM_CODEC,
                 WTPayloads::handleSfxVolume);
+        // S2C: tell clients to start/stop the looping static on a frequency.
+        // Handler calls WTClientSounds which uses Minecraft client classes — it is
+        // only ever *invoked* on the client (playToClient), so the class is only
+        // loaded on the client despite the reference living in this common class.
+        registrar.playToClient(
+                StaticStateS2C.TYPE,
+                StaticStateS2C.STREAM_CODEC,
+                WTPayloads::handleStaticState);
     }
 
     private static void handleConfigure(ConfigureWalkieC2S payload, IPayloadContext ctx) {
@@ -74,6 +84,11 @@ public final class WTPayloads {
             if (!(ctx.player() instanceof ServerPlayer sp)) return;
             RadioState.get(sp.server).setSfxVolume(sp.getUUID(), payload.volume());
         });
+    }
+
+    /** Only ever called on the logical client — WTClientSounds is never loaded server-side. */
+    private static void handleStaticState(StaticStateS2C payload, IPayloadContext ctx) {
+        ctx.enqueueWork(() -> WTClientSounds.setStatic(payload.frequency(), payload.active()));
     }
 
     private WTPayloads() {}

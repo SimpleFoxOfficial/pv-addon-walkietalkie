@@ -1,5 +1,7 @@
 package com.example.walkietalkie.client.voice;
 
+import com.example.walkietalkie.client.WTClientSounds;
+import com.example.walkietalkie.client.WTClientHooks;
 import com.example.walkietalkie.item.WalkieTalkieItem;
 import com.example.walkietalkie.net.payload.SfxVolumeC2S;
 import com.example.walkietalkie.voice.WalkieVoiceServerAddon;
@@ -44,10 +46,19 @@ import java.lang.reflect.Method;
 @Addon(
         id = "wt-addon-client",
         name = "Walkie Talkie (client)",
-        version = "1.0.4",
+        version = "1.0.5",
         authors = {"SimpleFox"}
 )
 public final class WalkieVoiceClientAddon implements AddonInitializer {
+
+    /** Set once during onAddonInitialize; lets WTClientSounds read the slider value. */
+    private static WalkieVoiceClientAddon INSTANCE;
+
+    public static float getSfxVolume() {
+        WalkieVoiceClientAddon inst = INSTANCE;
+        if (inst == null || inst.sfxVolumeEntry == null) return 0.3F;
+        return inst.sfxVolumeEntry.value().floatValue();
+    }
 
     @InjectPlasmoVoice
     private PlasmoVoiceClient voiceClient;
@@ -61,8 +72,10 @@ public final class WalkieVoiceClientAddon implements AddonInitializer {
 
     @Override
     public void onAddonInitialize() {
+        INSTANCE = this;
         NeoForge.EVENT_BUS.addListener(this::onClientTick);
         NeoForge.EVENT_BUS.addListener(this::onLoggingIn);
+        NeoForge.EVENT_BUS.addListener(this::onLoggingOut);
 
         // The addon's own block in PV's Addons settings menu. Backed by PV's normal
         // client config (config/plasmovoice/client.toml, "addons" section) -- same
@@ -80,7 +93,7 @@ public final class WalkieVoiceClientAddon implements AddonInitializer {
                 McTextComponent.translatable("config.walkietalkie.sfx_volume"),
                 McTextComponent.translatable("config.walkietalkie.sfx_volume.tooltip"),
                 "%",
-                0.6D, 0.0D, 1.0D
+                0.3D, 0.0D, 1.0D
         );
         // 60% default so the toggle/talk clicks don't blast players the moment they pick
         // one up; report it (and any later change) to the server, which is what actually
@@ -89,7 +102,12 @@ public final class WalkieVoiceClientAddon implements AddonInitializer {
     }
 
     private void onLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
+        WTClientSounds.stopAll(); // clear any stale loops from a prior session
         sendSfxVolume();
+    }
+
+    private void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        WTClientSounds.stopAll();
     }
 
     private void sendSfxVolume() {

@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class RadioState {
 
     /** Matches the AddonConfig slider's own default in WalkieVoiceClientAddon. */
-    public static final float DEFAULT_SFX_VOLUME = 0.6F;
+    public static final float DEFAULT_SFX_VOLUME = 0.3F;
 
     private static volatile RadioState instance;
 

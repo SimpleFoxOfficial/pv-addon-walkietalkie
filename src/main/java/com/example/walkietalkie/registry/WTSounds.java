@@ -25,6 +25,8 @@ public final class WTSounds {
     public static final DeferredHolder<SoundEvent, SoundEvent> TOGGLE_OFF = register("toggle_off");
     public static final DeferredHolder<SoundEvent, SoundEvent> TALK_START = register("talk_start");
     public static final DeferredHolder<SoundEvent, SoundEvent> TALK_STOP = register("talk_stop");
+    /** Looping analog static — plays to all frequency listeners while someone is transmitting. */
+    public static final DeferredHolder<SoundEvent, SoundEvent> RADIO_STATIC = register("radio_static");
 
     private static DeferredHolder<SoundEvent, SoundEvent> register(String name) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(WalkieTalkieMod.MOD_ID, name);
